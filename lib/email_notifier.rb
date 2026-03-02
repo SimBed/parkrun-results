@@ -1,0 +1,31 @@
+# frozen_string_literal: true
+
+require 'net/smtp'
+class EmailNotifier
+  GMAIL_API_KEY = ENV.fetch('GMAIL_API_KEY', nil)
+  EMAIL_FROM = ENV.fetch('EMAIL_FROM', nil)
+  EMAIL_TO = ENV.fetch('EMAIL_TO', nil)
+
+  def deliver(date, results)
+    results_text = results.map do |result|
+      <<~RESULT
+        Name: #{result[:name]}
+        Parkrun: #{result[:parkrun_name]}
+        Time: #{result[:time]}
+        Position: #{result[:position]}
+      RESULT
+    end.join("\n")
+    msgstr = <<~MESSAGE
+      From: #{EMAIL_FROM}
+      To: #{EMAIL_TO} 
+      Subject: Park Run Results on #{date}
+
+      #{results_text}
+    MESSAGE
+
+    Net::SMTP.start('smtp.gmail.com', 25, 'localhost', EMAIL_FROM, GMAIL_API_KEY,
+                    :login) do |smtp|
+      smtp.send_message msgstr, EMAIL_FROM, EMAIL_TO
+    end
+  end
+end

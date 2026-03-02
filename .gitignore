@@ -1,0 +1,15 @@
+*.log
+.env.secrets
+# Ignore contents of results directory but keep directory
+/results/*
+!/results/.keep
+
+# Ignore contents of config directory but keep directory
+/config/*
+!/config/.keep
+
+bin/log.txt
+bin/.byebug_history
+.byebug_history
+config/
+participants.yml

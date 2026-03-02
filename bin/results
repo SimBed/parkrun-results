@@ -1,0 +1,35 @@
+#!/home/simbed/.rbenv/shims/ruby
+# frozen_string_literal: true
+
+# get the shebang line from $which ruby
+# make this file executable with  $chmod +x file_name.rb
+
+require_relative '../lib/state_recorder'
+require "active_support"
+require "active_support/core_ext/date/calculations"
+date = Date.tomorrow.prev_occurring(:saturday)
+exit if StateRecorder.new(date).notifications_already_sent?
+
+require 'dotenv'
+require 'yaml'
+
+PROJECT_ROOT = File.expand_path('..', __dir__)
+Dir.chdir(PROJECT_ROOT)
+Dotenv.load('.env', '.env.secrets')
+require_relative '../lib/results_coordinator'
+
+participations = YAML.load_file('config/participations.yml')
+
+channels = []
+channels << EmailNotifier.new if ENV['EMAIL_ENABLED'] == 'true'
+notifier = Notifier.new(channels: channels)
+
+coordinator = ResultsCoordinator.new(participations, date, notifier)
+coordinator.record_raw_data
+if coordinator.results_all_in?
+  coordinator.process_results
+  coordinator.manage_notifications
+end
+
+all_results = coordinator.results
+puts all_results
