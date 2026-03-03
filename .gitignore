@@ -11,5 +11,3 @@
 bin/log.txt
 bin/.byebug_history
 .byebug_history
-config/
-participants.yml

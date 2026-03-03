@@ -5,11 +5,10 @@ Send email once all results in.
 Set up cron job locally for automation.
 
 ```
-30 12-23 * * Fri ~/parkrun/bin/cancellation_monitor >> ~/parkrun/bin/log.txt 2>&1<br>
-0 7-8 * * Sat ~/parkrun/bin/cancellation_monitor >> ~/parkrun/bin/log.txt 2>&1
+*/15 11-16 * * Sat ~/environment/non-rails-apps/parkrun-results/bin/results
 ```
 
-set config/participants.yml
+set config/participations.yml
 ```
 - name: "Martin Gichuhi"
   location: "ferry meadows"

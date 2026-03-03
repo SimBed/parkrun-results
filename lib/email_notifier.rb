@@ -1,20 +1,16 @@
 # frozen_string_literal: true
 
 require 'net/smtp'
+require_relative 'message_writer'
+
 class EmailNotifier
   GMAIL_API_KEY = ENV.fetch('GMAIL_API_KEY', nil)
   EMAIL_FROM = ENV.fetch('EMAIL_FROM', nil)
   EMAIL_TO = ENV.fetch('EMAIL_TO', nil)
 
   def deliver(date, results)
-    results_text = results.map do |result|
-      <<~RESULT
-        Name: #{result[:name]}
-        Parkrun: #{result[:parkrun_name]}
-        Time: #{result[:time]}
-        Position: #{result[:position]}
-      RESULT
-    end.join("\n")
+
+    results_text = MessageWriter.new(results).write_message
     msgstr = <<~MESSAGE
       From: #{EMAIL_FROM}
       To: #{EMAIL_TO} 
