@@ -6,10 +6,14 @@ class Parkrun
     @date = date
   end
 
-  def url_latest_result
+  def latest_result_page
     # /latestresults endpoint returns javascript which fetches from the yyyy-mm-dd endpoint.
     # /latestresults doesnt itself include the data we need.
     "https://www.parkrun.org.uk/#{code_name}/results/#{@date}/"
+  end
+
+  def homepage
+    "https://www.parkrun.org.uk/#{code_name}/"
   end
 
   def code_name

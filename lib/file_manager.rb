@@ -3,8 +3,10 @@
 module FileManager
   PROJECT_ROOT = File.expand_path('..', __dir__) # /home/..../parkrun
   RESULTS_DIR = File.join(PROJECT_ROOT, 'results') # /home/...../parkrun/results
-  def results_file_path(park_name, date)
-    File.join(RESULTS_DIR, "#{results_file_name(park_name, date)}.html") # /home/..../parkrun/results/"cassiobury-2026-02-28.html
+  
+  def results_file_path(park_name, date, cancelled: false)
+    extension = cancelled ? "cancelled" : "html"
+    File.join(RESULTS_DIR, "#{results_file_name(park_name, date)}.#{extension}") # /home/..../parkrun/results/"cassiobury-2026-02-28.html" or "cassiobury-2026-02-28.cancelled"
   end
 
   def results_file_name(park_name, date)

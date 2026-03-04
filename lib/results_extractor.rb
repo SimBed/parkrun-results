@@ -9,17 +9,16 @@ class ResultsExtractor
     @noko_doc = noko_doc
   end
 
-  def extract_results(full_name)
+  def extract_results(runner_name)
     row = @noko_doc.css("table.Results-table tbody tr").find do |tr|
-      tr["data-name"]&.casecmp?(full_name)
+      tr["data-name"]&.casecmp?(runner_name)
     end
-    return { name: full_name, competed: false} unless row
+    partial_result = { name: runner_name, competed: false, cancelled: false }
+    return partial_result unless row
     
-    {
-      name: full_name,
-      competed: true,
-      position: row.at_css("td.Results-table-td--position")&.text&.strip,
-      time: row.at_css("td.Results-table-td--time div")&.text&.strip
-    }
+    partial_result.merge!({ competed: true,
+                            position: row.at_css("td.Results-table-td--position")&.text&.strip,
+                            time: row.at_css("td.Results-table-td--time div")&.text&.strip
+                          })          
   end
 end

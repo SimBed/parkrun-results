@@ -9,10 +9,15 @@ class MessageWriter
     @results.map { |result| write_line(result) }.join("\n")
   end
 
-
   private
   def write_line(result)
-    if result[:competed]
+    if result[:cancelled]
+      <<~RESULT
+        Name: #{result[:name]}
+        Parkrun: #{result[:parkrun_name]}
+        Parkrun was cancelled this week
+      RESULT
+    elsif result[:competed]
       <<~RESULT
         Name: #{result[:name]}
         Parkrun: #{result[:parkrun_name]}
