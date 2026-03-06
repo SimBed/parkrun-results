@@ -8,14 +8,15 @@ class EmailNotifier
   EMAIL_FROM = ENV.fetch('EMAIL_FROM', nil)
   EMAIL_TO = ENV.fetch('EMAIL_TO', nil)
 
-  def deliver(date, results)
-
+  def deliver(date, results, results_all_in)
+    subheading = "Further results will follow as published.\n" if results_all_in
     results_text = MessageWriter.new(results).write_message
     msgstr = <<~MESSAGE
       From: #{EMAIL_FROM}
       To: #{EMAIL_TO} 
       Subject: Park Run Results on #{date}
 
+      #{subheading}
       #{results_text}
     MESSAGE
 

@@ -13,11 +13,14 @@ module FileManager
     "#{park_name}-#{date}" # "cassiobury-2026-02-28"
   end
 
-  def notifications_sent_file_path(date)
-    File.join(RESULTS_DIR, "#{notifications_sent_file_name(date)}.sent") # /home/..../parkrun/results/notifications-2026-02-28.sent
+  def notification_sent_file_path(date, final: false)
+    # /home/..../parkrun/results/last[or final]-notification-2026-02-28.sent
+    File.join(RESULTS_DIR, "#{notification_sent_file_name(date, final: final)}.sent") 
   end
 
-  def notifications_sent_file_name(date)
-    "notifications-#{date}" # "notifications-2026-02-28"
+  def notification_sent_file_name(date, final: false)
+    prefix = final ? "final" : "last"
+    # "last-notification-2026-02-28" or "final-notification-2026-02-28"    
+    "#{prefix}-notification-#{date}"
   end
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: false
 
 require_relative 'website_requester'
-require_relative 'state_recorder'
 
 class CancellationDetector
   def initialize(parkrun)

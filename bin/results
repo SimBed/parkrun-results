@@ -4,32 +4,27 @@
 # get the shebang line from $which ruby
 # make this file executable with  $chmod +x file_name.rb
 
-require_relative '../lib/state_recorder'
 require "active_support"
 require "active_support/core_ext/date/calculations"
-date = Date.tomorrow.prev_occurring(:saturday)
-exit if StateRecorder.new(date).notifications_already_sent?
-
 require 'dotenv'
 require 'yaml'
-
 PROJECT_ROOT = File.expand_path('..', __dir__)
 Dir.chdir(PROJECT_ROOT)
 Dotenv.load('.env', '.env.secrets')
-require_relative '../lib/results_coordinator'
+require_relative '../lib/results_manager'
+require_relative '../lib/notification_manager'
+
+date = Date.tomorrow.prev_occurring(:saturday)
+# minimum_delay = ENV['MINIMUM_NOTIFICATION_DELAY_MINS'].to_i
+# exit unless StateRecorder.new(date).ok_to_send_notification?(minimum_delay)
 
 participations = YAML.load_file('config/participations.yml')
 
-channels = []
-channels << EmailNotifier.new if ENV['EMAIL_ENABLED'] == 'true'
-notifier = Notifier.new(channels: channels)
+results_manager = ResultsManager.new(participations, date)
+results_manager.record_raw_data
+results_manager.process_results
+results = results_manager.results
+results_all_in = results_manager.results_all_in
+NotificationManager.new(date, results, results_all_in).run if results_manager.notifiable_change
 
-coordinator = ResultsCoordinator.new(participations, date, notifier)
-coordinator.record_raw_data
-if coordinator.results_all_in?
-  coordinator.process_results
-  coordinator.manage_notifications
-end
-
-all_results = coordinator.results
-puts all_results
+puts results
