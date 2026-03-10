@@ -3,7 +3,6 @@
 
 # get the shebang line from $which ruby
 # make this file executable with  $chmod +x file_name.rb
-
 require "active_support"
 require "active_support/core_ext/date/calculations"
 require 'dotenv'

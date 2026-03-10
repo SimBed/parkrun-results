@@ -6,7 +6,7 @@ module FileManager
   
   def results_file_path(park_name, date, cancelled: false)
     extension = cancelled ? "cancelled" : "html"
-    File.join(RESULTS_DIR, "#{results_file_name(park_name, date)}.#{extension}") # /home/..../parkrun/results/"cassiobury-2026-02-28.html" or "cassiobury-2026-02-28.cancelled"
+    File.join(RESULTS_DIR, "#{results_file_name(park_name, date)}.#{extension}") # "/home/..../results/cassiobury-2026-02-28.html[cancelled]"
   end
 
   def results_file_name(park_name, date)

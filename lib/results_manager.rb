@@ -64,11 +64,4 @@ class ResultsManager
     cancellation # returns a boolean value, so we can use it directly with next in the block
   end
 
-  # def issue_results
-  #   @notifier.notify(@date, @results)
-  # end
-
-  # def record_results_issued
-  #   StateRecorder.new(@date).record_notifications_sent
-  # end
 end
